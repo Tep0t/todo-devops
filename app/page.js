@@ -62,23 +62,25 @@ export default function Home() {
   return (
     <div className={styles.page} data-theme={theme}>
       <main className={styles.main}>
-        <button
-          className={styles.themeToggle}
-          type="button"
-          onClick={toggleTheme}
-          aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
-        >
-          <span className={styles.themeIcon} aria-hidden="true">
-            {theme === "dark" ? "☾" : "☀"}
-          </span>
-          <span>{theme === "dark" ? "Dark Mode" : "Light Mode"}</span>
-        </button>
+        <div className={styles.headerRow}>
+          <header className={styles.header}>
+            <p className={styles.eyebrow}>Daily focus</p>
+            <h1>My ToDo List</h1>
+            <p className={styles.subtitle}>Keep the next small step in sight.</p>
+          </header>
 
-        <header className={styles.header}>
-          <p className={styles.eyebrow}>Daily focus</p>
-          <h1>My ToDo List</h1>
-          <p className={styles.subtitle}>Keep the next small step in sight.</p>
-        </header>
+          <button
+            className={styles.themeToggle}
+            type="button"
+            onClick={toggleTheme}
+            aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+          >
+            <span className={styles.themeIcon} aria-hidden="true">
+              {theme === "dark" ? "☾" : "☀"}
+            </span>
+            <span>{theme === "dark" ? "Dark Mode" : "Light Mode"}</span>
+          </button>
+        </div>
 
         <section className={styles.todoPanel} aria-labelledby="todo-heading">
           <div className={styles.panelHeader}>

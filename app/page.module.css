@@ -21,8 +21,17 @@
   padding: 72px 0 96px;
 }
 
+.headerRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 28px;
+  margin-bottom: 44px;
+}
+
 .themeToggle {
   display: inline-flex;
+  flex: 0 0 auto;
   align-items: center;
   gap: 8px;
   border: 1px solid var(--border);
@@ -55,7 +64,7 @@
 }
 
 .header {
-  margin-bottom: 44px;
+  min-width: 0;
 }
 
 .eyebrow {
@@ -236,6 +245,16 @@
   .main {
     width: min(100% - 32px, 760px);
     padding-top: 48px;
+  }
+
+  .headerRow {
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .themeToggle {
+    align-self: flex-end;
+    order: -1;
   }
 
   .addForm {
