@@ -69,7 +69,10 @@ export default function Home() {
             ) : (
               <ul className={styles.taskList}>
                 {tasks.map((task) => (
-                  <li className={styles.taskItem} key={task.id}>
+                  <li
+                    className={`${styles.taskItem} ${task.completed ? styles.completedItem : ""}`}
+                    key={task.id}
+                  >
                     <label className={styles.taskLabel}>
                       <input
                         type="checkbox"

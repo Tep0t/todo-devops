@@ -129,6 +129,10 @@
   padding: 18px 0;
 }
 
+.completedItem {
+  background: rgb(139 92 246 / 7%);
+}
+
 .taskLabel {
   display: flex;
   min-width: 0;
