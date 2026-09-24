@@ -2,12 +2,56 @@
   min-height: 100%;
   background: var(--background);
   color: var(--foreground);
+  transition: background-color 220ms ease, color 220ms ease;
+}
+
+.page[data-theme="light"] {
+  --background: #f8f8fb;
+  --foreground: #18181b;
+  --card: #ffffff;
+  --light-purple: #7c3aed;
+  --secondary: #52525b;
+  --border: #d4d4d8;
+  --input-background: #ffffff;
 }
 
 .main {
   width: min(100% - 40px, 780px);
   margin: 0 auto;
   padding: 72px 0 96px;
+}
+
+.themeToggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--foreground);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 8px 13px 8px 10px;
+  transition: background-color 220ms ease, border-color 220ms ease, color 220ms ease;
+}
+
+.themeToggle:hover,
+.themeToggle:focus-visible {
+  border-color: var(--purple);
+  color: var(--light-purple);
+}
+
+.themeToggle:focus-visible {
+  outline: 3px solid rgb(139 92 246 / 25%);
+  outline-offset: 2px;
+}
+
+.themeIcon {
+  color: var(--purple);
+  font-size: 1.1rem;
+  line-height: 1;
 }
 
 .header {
@@ -42,6 +86,7 @@
   border-radius: 12px;
   background: var(--card);
   padding: 8px 28px 28px;
+  transition: background-color 220ms ease, border-color 220ms ease;
 }
 
 .panelHeader {
@@ -72,11 +117,12 @@
   flex: 1;
   border: 1px solid var(--border);
   border-radius: 6px;
-  background: #0f0f14;
+  background: var(--input-background);
   color: var(--foreground);
   font: inherit;
   font-size: 0.95rem;
   padding: 14px 16px;
+  transition: background-color 220ms ease, border-color 220ms ease, color 220ms ease;
 }
 
 .addForm input:focus {

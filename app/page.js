@@ -1,11 +1,30 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import styles from "./page.module.css";
+
+function subscribeToTheme(callback) {
+  window.addEventListener("todo-theme-change", callback);
+  return () => window.removeEventListener("todo-theme-change", callback);
+}
+
+function getThemeSnapshot() {
+  const savedTheme = window.localStorage.getItem("todo-theme");
+  return savedTheme === "light" || savedTheme === "dark" ? savedTheme : "dark";
+}
+
+function getServerThemeSnapshot() {
+  return "dark";
+}
 
 export default function Home() {
   const [taskText, setTaskText] = useState("");
   const [tasks, setTasks] = useState([]);
+  const theme = useSyncExternalStore(
+    subscribeToTheme,
+    getThemeSnapshot,
+    getServerThemeSnapshot,
+  );
 
   function addTask(event) {
     event.preventDefault();
@@ -34,9 +53,27 @@ export default function Home() {
     setTasks((currentTasks) => currentTasks.filter((task) => task.id !== taskId));
   }
 
+  function toggleTheme() {
+    const nextTheme = theme === "dark" ? "light" : "dark";
+    window.localStorage.setItem("todo-theme", nextTheme);
+    window.dispatchEvent(new Event("todo-theme-change"));
+  }
+
   return (
-    <div className={styles.page}>
+    <div className={styles.page} data-theme={theme}>
       <main className={styles.main}>
+        <button
+          className={styles.themeToggle}
+          type="button"
+          onClick={toggleTheme}
+          aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+        >
+          <span className={styles.themeIcon} aria-hidden="true">
+            {theme === "dark" ? "☾" : "☀"}
+          </span>
+          <span>{theme === "dark" ? "Dark Mode" : "Light Mode"}</span>
+        </button>
+
         <header className={styles.header}>
           <p className={styles.eyebrow}>Daily focus</p>
           <h1>My ToDo List</h1>
