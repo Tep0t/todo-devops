@@ -67,6 +67,7 @@ export default function Home() {
             <p className={styles.eyebrow}>Daily focus</p>
             <h1>My ToDo List</h1>
             <p className={styles.subtitle}>Keep the next small step in sight.</p>
+            <p className={styles.version}>Version 1.1</p>
           </header>
 
           <button
