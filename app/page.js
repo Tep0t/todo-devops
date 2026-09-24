@@ -1,68 +1,141 @@
-import Image from "next/image";
+"use client";
+
+import { useState, useSyncExternalStore } from "react";
 import styles from "./page.module.css";
 
+function subscribeToTheme(callback) {
+  window.addEventListener("todo-theme-change", callback);
+  return () => window.removeEventListener("todo-theme-change", callback);
+}
+
+function getThemeSnapshot() {
+  const savedTheme = window.localStorage.getItem("todo-theme");
+  return savedTheme === "light" || savedTheme === "dark" ? savedTheme : "dark";
+}
+
+function getServerThemeSnapshot() {
+  return "dark";
+}
+
 export default function Home() {
+  const [taskText, setTaskText] = useState("");
+  const [tasks, setTasks] = useState([]);
+  const theme = useSyncExternalStore(
+    subscribeToTheme,
+    getThemeSnapshot,
+    getServerThemeSnapshot,
+  );
+
+  function addTask(event) {
+    event.preventDefault();
+    const title = taskText.trim();
+
+    if (!title) {
+      return;
+    }
+
+    setTasks((currentTasks) => [
+      ...currentTasks,
+      { id: crypto.randomUUID(), title, completed: false },
+    ]);
+    setTaskText("");
+  }
+
+  function toggleTask(taskId) {
+    setTasks((currentTasks) =>
+      currentTasks.map((task) =>
+        task.id === taskId ? { ...task, completed: !task.completed } : task,
+      ),
+    );
+  }
+
+  function deleteTask(taskId) {
+    setTasks((currentTasks) => currentTasks.filter((task) => task.id !== taskId));
+  }
+
+  function toggleTheme() {
+    const nextTheme = theme === "dark" ? "light" : "dark";
+    window.localStorage.setItem("todo-theme", nextTheme);
+    window.dispatchEvent(new Event("todo-theme-change"));
+  }
+
   return (
-    <div className={styles.page}>
+    <div className={styles.page} data-theme={theme}>
       <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>
-            To get started, edit the{" "}
-            <code className={styles.code}>page.js</code> file.
-          </h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+        <div className={styles.headerRow}>
+          <header className={styles.header}>
+            <p className={styles.eyebrow}>Daily focus</p>
+            <h1>My ToDo List</h1>
+            <p className={styles.subtitle}>Keep the next small step in sight.</p>
+          </header>
+
+          <button
+            className={styles.themeToggle}
+            type="button"
+            onClick={toggleTheme}
+            aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
           >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
+            <span className={styles.themeIcon} aria-hidden="true">
+              {theme === "dark" ? "☾" : "☀"}
+            </span>
+            <span>{theme === "dark" ? "Dark Mode" : "Light Mode"}</span>
+          </button>
+        </div>
+
+        <section className={styles.todoPanel} aria-labelledby="todo-heading">
+          <div className={styles.panelHeader}>
+            <h2 id="todo-heading">Tasks</h2>
+            <span className={styles.taskCount}>{tasks.length} total</span>
+          </div>
+
+          <form className={styles.addForm} onSubmit={addTask}>
+            <label className={styles.srOnly} htmlFor="task-input">
+              New task
+            </label>
+            <input
+              id="task-input"
+              type="text"
+              value={taskText}
+              onChange={(event) => setTaskText(event.target.value)}
+              placeholder="What needs doing?"
             />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+            <button type="submit">Add Task</button>
+          </form>
+
+          <div className={styles.listArea} aria-live="polite">
+            {tasks.length === 0 ? (
+              <p className={styles.emptyState}>Your list is clear. Add a task to get started.</p>
+            ) : (
+              <ul className={styles.taskList}>
+                {tasks.map((task) => (
+                  <li
+                    className={`${styles.taskItem} ${task.completed ? styles.completedItem : ""}`}
+                    key={task.id}
+                  >
+                    <label className={styles.taskLabel}>
+                      <input
+                        type="checkbox"
+                        checked={task.completed}
+                        onChange={() => toggleTask(task.id)}
+                      />
+                      <span className={task.completed ? styles.completed : ""}>
+                        {task.title}
+                      </span>
+                    </label>
+                    <button
+                      className={styles.deleteButton}
+                      type="button"
+                      onClick={() => deleteTask(task.id)}
+                      aria-label={`Delete ${task.title}`}
+                    >
+                      Delete
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </section>
       </main>
     </div>
   );
