@@ -1,6 +1,12 @@
 :root {
-  --background: #f3f0e9;
-  --foreground: #1f2925;
+  --background: #0b0b0f;
+  --foreground: #ffffff;
+  --card: #15151c;
+  --purple: #8b5cf6;
+  --light-purple: #a78bfa;
+  --secondary: #a1a1aa;
+  --border: #27272a;
+  --danger: #ef4444;
 }
 
 html {
@@ -19,6 +25,7 @@ body {
   flex-direction: column;
   color: var(--foreground);
   background: var(--background);
+  font-family: var(--font-sora), sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
