@@ -159,6 +159,7 @@
 
 .deleteButton {
   flex: 0 0 auto;
+  border: 1px solid transparent;
   background: transparent;
   color: var(--danger);
   font-size: 0.85rem;
@@ -166,6 +167,9 @@
 }
 
 .deleteButton:hover {
+  border-color: rgb(239 68 68 / 35%);
+  border-radius: 4px;
+  padding: 6px 8px;
   color: #f87171;
   text-decoration: underline;
 }
