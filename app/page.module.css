@@ -90,6 +90,13 @@
   font-size: 1.05rem;
 }
 
+.version {
+  margin-top: 12px;
+  color: var(--light-purple);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
 .todoPanel {
   border: 1px solid var(--border);
   border-radius: 12px;
